@@ -1,5 +1,6 @@
 from tkinter import *
-from constants import LBL_BG
+
+LBL_BG = "#8D86C9"
 
 class PlaceholderEntry(Entry):
     def __init__(self, placeholder="", *args, **kwargs):
@@ -56,10 +57,70 @@ class SideButton(Frame):
     def reset_lbl(self):
         self.label.config(bg=self.kwargs.get("bg", "#ffffff"))
 
-class FlightFrame(Frame):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class NormalFlightFrame(Frame):
+    def __init__(self, master, flight_name, flight_no, start_time, stop_time, price, start, stop, travellers):
+        super().__init__(master=master, bg="#ffffff")
+
+        self.travellers = travellers
+
+        self.flight_name = flight_name
+        self.flight_no = flight_no
+        self.start_time = start_time
+        self.stop_time = stop_time
+        self.start = start
+        self.stop = stop
+        self.price = price
+
+        self.initialize()
+
+    def initialize(self):
+        # Flight Name and Number
+        flight_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
+        flight_frm.place(x=0, y=0, relwidth=0.2, relheight=1)
+        flight_lbl = Label(flight_frm, bg="#ffffff", text=self.flight_name, font=("Helvetica", 20, "bold"))
+        flight_lbl.place(x=0, y=0, relwidth=1, relheight=0.8)
+        flight_no_lbl = Label(flight_frm, fg="#444444", bg="#ffffff", text=self.flight_no, font=("Helvetica", 11))
+        flight_no_lbl.place(x=0, rely=0.65, relwidth=1, relheight=0.25)
+
+        # Start time and place
+        start_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
+        start_frm.place(relx=0.2, y=0, relwidth=0.2, relheight=1)
+        start_time_lbl = Label(start_frm, bg="#ffffff", text=self.start_time, font=("Helvetica", 20, "bold"))
+        start_time_lbl.place(x=0, y=0, relwidth=1, relheight=0.8)
+        start_place_lbl = Label(start_frm, fg="#444444", bg="#ffffff", text=self.start, font=("Helvetica", 11))
+        start_place_lbl.place(x=0, rely=0.65, relwidth=1, relheight=0.25)
+
+        # Total Time
+        start, stop = int(self.start_time[-4::-1][::-1]), int(self.stop_time[-4::-1][::-1])
+        total_time = stop - start if start < stop else stop+24 - start
+        total_time = str(total_time) + "h 00m"
+        stop_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
+        stop_frm.place(relx=0.4, y=0, relwidth=0.2, relheight=1)
+        stop_time_lbl = Label(stop_frm, bg="#ffffff", text=total_time, font=("Helvetica", 15))
+        stop_time_lbl.place(x=0, y=0, relwidth=1, relheight=1)
+
+        # Stop time and place
+        stop_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
+        stop_frm.place(relx=0.6, y=0, relwidth=0.2, relheight=1)
+        stop_time_lbl = Label(stop_frm, bg="#ffffff", text=self.stop_time, font=("Helvetica", 20, "bold"))
+        stop_time_lbl.place(x=0, y=0, relwidth=1, relheight=0.8)
+        stop_place_lbl = Label(stop_frm, fg="#444444", bg="#ffffff", text=self.stop, font=("Helvetica", 11))
+        stop_place_lbl.place(x=0, rely=0.65, relwidth=1, relheight=0.25)
+
+        # Price
+        price_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
+        price_frm.place(relx=0.8, y=0, relwidth=0.2, relheight=1)
+        price_lbl = Label(price_frm, bg="#ffffff", text="₹"+str(self.price), font=("Helvetica", 20, "bold"))
+        price_lbl.place(x=0, y=0, relwidth=1, relheight=1)
+
 
 
 if __name__ == "__main__":
     win = Tk()
+    win.geometry("1000x600")
+    win.config(bg="grey")
+
+    frm = NormalFlightFrame("AirAsia", 184765, "1:00", "02:00", "Bengaluru", "Kochi", 23456)
+    frm.place(x=105, y=100, height=100, width=1000-105)
+
+    win.mainloop()
