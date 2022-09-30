@@ -1,4 +1,4 @@
-from tkinter import Entry, Frame, Button, Label, PhotoImage
+from tkinter import *
 from constants import LBL_BG
 
 class PlaceholderEntry(Entry):
@@ -59,3 +59,7 @@ class SideButton(Frame):
 class FlightFrame(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+if __name__ == "__main__":
+    win = Tk()

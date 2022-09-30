@@ -18,6 +18,7 @@ def_font = "Helvetica"
 
 ### DATA ###
 cities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", "Surat", "Pune", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziaba", "Ludhiana", "Agra", "Nashik", "Faridabad", "Meerut", "Rajkot", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Amritsar", 'NaviMumbai', "Allahabad", "Howrah", "Ranchi", 'Gwalior', "Jabalpur", "Coimbatore", "Vijayawada", "Jodhpur", "Madurai", "Raipur", "Kota", "Chandigarh", "Guwahati", "Solapur", "Hubli", "Mysore", "Tiruchirappalli", "Bareilly", "Aligarh", "Tiruppur", "Gurgaon", "Moradabad", "Jalandhar", "Bhubaneswar", "Salem", "Warangal", "Jalgaon", "Guntur", "Thiruvananthapur", "Bhiwandi", "Saharanpur", "Gorakhpur", "Bikaner", "Amravati", "Noida", "Jamshedpur", "Bhilai", "Cuttack", "Firozabad", "Kochi", "Nellore", "Bhavnagar"]
+flight_names = ("AirIndia", "Indigo", "SpiceJet", "JetAirways", "AirAsia", "GoAir", "Vistara", "TruJet", "AllianceAir")
 
 ### WINDOW PROPERTIES ###
 BG_COLOR = "#725AC1"

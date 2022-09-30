@@ -1,11 +1,11 @@
 from tkinter import *
 from tkinter.ttk import Combobox
 from constants import *
-from widgets.wid import SideButton
+from widgets.wid import SideButton, FlightFrame
 from tkcalendar import DateEntry
 import random as r
+from utils import Frame_Base
 
-### TESTING
 
 class Nav(Frame):
     def __init__(self, *args, **kwargs):
@@ -19,18 +19,14 @@ class Nav(Frame):
         self.plane_btn = SideButton(master=self.kwargs.get("master", None), selected=1, img_path="images/flightimage.png", text="F", bg=self.kwargs.get("bg", "#ffffff"))
 
     def place_widgets(self):
-        self.plane_btn.place(x=0, y=0, width=100, height=100)
-
-
-class FlightFrame(Frame):
-    def __init__(self):
-        super().__init__()
-        
+        self.plane_btn.place(x=0, y=0, width=100, height=100)        
 
 
 class Main_Frame(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.placed = True
 
         self.trip_type = IntVar()
 
@@ -40,7 +36,7 @@ class Main_Frame(Frame):
         self.create_flight_widgets()
 
         self.prev_w, self.prev_h = self.master.winfo_width(), self.master.winfo_height()
-        self.master.bind("<Configure>", self.update_main_frame)
+        self.master.bind_all("<Configure>", self.update_main_frame)
 
 
     def disable_return(self, type):
@@ -105,10 +101,31 @@ class Main_Frame(Frame):
         ### SEARCH BUTTON ###
         search_btn = Button(self.flight_frame, bg=LAVENDER, fg="#ffffff", text="Search", font=(def_font, 20, "bold"), bd=0, activebackground=LIGHT_LAVENDER, activeforeground="#ffffff")
         search_btn.place(relx=0.125*3, rely=0.8, relheight=0.15, relwidth=0.2)
-        # search_btn.bind("<ButtonRelease-1>", self.)
+        search_btn.bind("<ButtonRelease-1>", switch_frame)
 
 
     def update_main_frame(self, e=None):
+        if not self.placed: return
+        if e is None: 
+            self.place(x=105, y=0, relheight=1, width=self.master.winfo_width()-105)
+            return
+        if e.width == self.prev_w and e.height == self.prev_h: return
+        
+        self.place(x=105, y=0, relheight=1, width=self.master.winfo_width()-105)
+        self.prev_w, self.prev_h = e.width, e.height
+
+
+class Display_Frame(Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.placed = False
+
+        self.prev_w, self.prev_h = self.master.winfo_width(), self.master.winfo_height()
+        self.master.bind_all("<Configure>", self.update_main_frame)
+
+    def update_main_frame(self, e=None):
+        if not self.placed: return
         if e is None: 
             self.place(x=105, y=0, relheight=1, width=self.master.winfo_width()-105)
             return
@@ -119,33 +136,43 @@ class Main_Frame(Frame):
 
 
 def main():
-    global prev_w, prev_h
+    global main_frame, flight_display_frame
     win = Tk()
     win.geometry(f"{WIDTH}x{HEIGHT}")
     win.minsize(WIDTH, HEIGHT)
-    win.config(bg=BG_COLOR)
     
     navbar = Nav(master=win, bg=NAV_BG)
     navbar.place(x=0, y=0, width=105, relheight=1)
 
     win.update()
-    main_frame = Main_Frame(master=win, bg=LIGHT_LAVENDER)
-    # main_frame.update_main_frame()
+    flight_display_frame = Display_Frame(master=win, bg="grey")
+    main_frame = Main_Frame(master=win, bg=BG_COLOR)
+
+    main_frame.update_main_frame()
 
     win.update()
     win.mainloop()
 
+
+def switch_frame(e=None):
+    global main_frame, flight_display_frame
+
+    main_frame.place_forget()
+    
+    flight_display_frame.placed = True
+    main_frame.placed = False
+
+    flight_display_frame.update_main_frame()
 
 def get_selected(navbar: Nav):
     for child in navbar.winfo_children():
         if child.label.cget("bg") == "#ffffff":
             return child.button["text"]
 
-
-def get_oneway_flight_details(start, end):
+def get_oneway_flight_details():
     for i in range(10):
         flight_no = r.randint(100000, 999999)
-        flight_name = r.choice(("AirIndia", "Indigo", "SpiceJet", "JetAirways", "AirAsia", "GoAir", "Vistara", "TruJet", "AllianceAir"))
+        flight_name = r.choice()
         flight_start_time = r.randint(0, 23)
         flight_end_time = flight_start_time + r.randint(1, 6)
         flight_start_time = str(flight_start_time) + ":00"
@@ -157,4 +184,3 @@ def get_oneway_flight_details(start, end):
 
 if __name__ == "__main__":
     main()
-    print(list(get_oneway_flight_details("dsf", "DSf")))
