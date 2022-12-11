@@ -111,7 +111,9 @@ class NormalFlightFrame(Frame):
         price_frm = Frame(self, bg="#ffffff", highlightthickness=1, highlightbackground="#cdcdcd", bd=10)
         price_frm.place(relx=0.8, y=0, relwidth=0.2, relheight=1)
         price_lbl = Label(price_frm, bg="#ffffff", text="₹"+str(self.price), font=("Helvetica", 20, "bold"))
-        price_lbl.place(x=0, y=0, relwidth=1, relheight=1)
+        price_lbl.place(x=0, y=0, relwidth=1, relheight=0.7)
+        self.book_now_btn = Button(price_frm, text="View More", font=("Helvetica", 12), bd=0)
+        self.book_now_btn.place(x=0, rely=0.7, relheight=0.3, relwidth=1)
 
 
 

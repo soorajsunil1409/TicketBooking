@@ -15,12 +15,13 @@ class Nav(Frame):
         self.place_widgets()
 
     def init_buttons(self):
-        self.plane_btn = SideButton(master=self.kwargs.get("master", None), selected=1, img_path="images/flightimage.png", text="F", bg=self.kwargs.get("bg", "#ffffff"))
-        self.profile_btn = SideButton(master=self.kwargs.get("master", None), selected=1, img_path="images/flightimage.png", text="F", bg=self.kwargs.get("bg", "#ffffff"))
+        self.plane_btn = SideButton(master=self.kwargs.get("master", None), selected=1, img_path="images/flightimage.png", text="Home", bg=self.kwargs.get("bg", "#ffffff"))
+        self.profile_btn = SideButton(master=self.kwargs.get("master", None), selected=0, img_path="images/flightimage.png", text="Display", bg=self.kwargs.get("bg", "#ffffff"))
         self.plane_btn.bind_all("<Button-1>", switch_frame_to_home)
 
     def place_widgets(self):
-        self.plane_btn.place(x=0, y=0, width=100, height=100)        
+        self.plane_btn.place(x=0, y=0, width=100, height=100)
+        self.plane_btn.set_lbl_bg(self.plane_btn)      
 
 
 class Main_Frame(Frame):
@@ -108,6 +109,7 @@ class Main_Frame(Frame):
 
 
     def switch(self, e=None):
+        global main_frame_details
         start_place = self.ff_selection_box.get()
         stop_place = self.ft_selection_box.get()
         start_date = self.dep_date_box._date
@@ -118,10 +120,10 @@ class Main_Frame(Frame):
 
         main_frame_details = start_place, stop_place, travellers, start_date, stop_date
 
-        switch_frame_to_display(main_frame_details)
+        switch_frame_to_display()
 
 
-    def update_main_frame(self, e=None):
+    def update_frame(self, e=None):
         if not self.placed: return
         if e is None: 
             self.place(x=105, y=0, relheight=1, width=self.master.winfo_width()-105)
@@ -164,10 +166,12 @@ class Display_Frame(Frame):
 
 
 def main():
-    global main_frame, flight_display_frame, win
+    global main_frame, flight_display_frame, win, main_frame_details
     win = Tk()
     win.geometry(f"{WIDTH}x{HEIGHT}")
     win.minsize(WIDTH, HEIGHT)
+
+    main_frame_details = None
     
     navbar = Nav(master=win, bg=NAV_BG)
     navbar.place(x=0, y=0, width=105, relheight=1)
@@ -184,11 +188,13 @@ def main():
 
 def update_frames(e=None):
     flight_display_frame.update_frame()
-    main_frame.update_main_frame()
+    main_frame.update_frame()
 
 
-def switch_frame_to_display(main_frame_details):
-    global main_frame, flight_display_frame
+def switch_frame_to_display():
+    global main_frame, flight_display_frame, main_frame_details
+
+    if not main_frame_details: return
 
     main_frame.place_forget()
     
@@ -200,7 +206,7 @@ def switch_frame_to_display(main_frame_details):
 
 
 def switch_frame_to_home(e=None):
-    if not isinstance(e.widget, Button) or e.widget["text"] != "F": return
+    if not isinstance(e.widget, Button) or e.widget["text"] != "Home": return
     global main_frame, flight_display_frame
 
     flight_display_frame.place_forget()
@@ -208,7 +214,7 @@ def switch_frame_to_home(e=None):
     main_frame.placed = True
     flight_display_frame.placed = False
 
-    main_frame.update_main_frame()
+    main_frame.update_frame()
 
 
 def get_selected(navbar: Nav):
