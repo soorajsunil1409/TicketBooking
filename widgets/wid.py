@@ -150,7 +150,7 @@ class BookNowPage(Toplevel):
 
     def initialize_widgets(self):
         self.main_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.main_frame.place(x=5, y=5, width=400, height=282)
+        self.main_frame.place(x=5, y=5, width=380, height=282)
         
         # region Details
         from_to_lbl = Label(self.main_frame, text=f"{self.details['From']}  →  {self.details['To']}", font=("Helvetica", 14, "bold"), anchor=W)
@@ -165,14 +165,12 @@ class BookNowPage(Toplevel):
         # endregion
 
         self.time_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.time_frame.place(x=5, y=100, width=385, height=85)
+        self.time_frame.place(x=5, y=100, width=365, height=85)
 
         self.baggage_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.baggage_frame.place(x=5, y=190, width=385, height=85)
+        self.baggage_frame.place(x=5, y=190, width=365, height=85)
 
         # region Baggage Details
-
-        # endregion
         self.baggage_lbl = Label(self.baggage_frame, text='Baggage         Check-in         Cabin', font=("Helvetica", 13), anchor=W)
         self.baggage_lbl.place(x=5, y=5, relwidth=0.9, height=20)
 
@@ -181,6 +179,7 @@ class BookNowPage(Toplevel):
 
         self.under_baggage_lbl2 = Label(self.baggage_frame, text='\t            piece only)         piece only)', font=("Helvetica", 11, "bold"), anchor=W)
         self.under_baggage_lbl2.place(x=5, y=50, relwidth=0.9, height=20)
+        # endregion
 
         # region Time Details
         self.start_time_lbl = Label(self.time_frame, text=f'{self.details["Start_Time"]}        {self.details["From"]}', font=("Helvetica", 13, "bold"), anchor=W)
@@ -194,8 +193,21 @@ class BookNowPage(Toplevel):
         self.stop_time_lbl.place(x=5, y=55, relwidth=0.9, height=20)
         # endregion
 
+        fare_w = 215
         self.fare_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.fare_frame.place(x=400, y=5, width=195, height=282)
+        self.fare_frame.place(x=380, y=5, width=fare_w, height=282)
+
+        # region Fare Details
+        self.fare_title_lbl = Label(self.fare_frame, text="Fare Summary", font=("Helvetica", 15, "bold"), anchor=W)
+        self.fare_title_lbl.place(x=10, y=10, width=fare_w-10, height=20)
+
+        self.base_fare_lbl = Label(self.fare_frame, text="Base Fare", font=("Helvetica", 10, "bold"), anchor=W)
+        self.base_fare_lbl.place(x=10, y=45, width=fare_w-10, height=10)
+
+        base_fare_txt = f"Adult(s) ({self.details['Travellers']} x ₹{self.details['Price']})     ₹{int(self.details['Price']) * int(self.details['Travellers'])}"
+        self.base_fare_price_lbl = Label(self.fare_frame, text=base_fare_txt, font=("Helvetica", 10), anchor=W)
+        self.base_fare_price_lbl.place(x=10, y=60, width=fare_w-10, height=20)
+        # endregion
 
 def convert_to_date_format(start, stop, start_date, stop_date=None):
     start_time, stop_time = int(start[-4::-1][::-1]), int(stop[-4::-1][::-1])
