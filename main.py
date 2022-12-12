@@ -151,7 +151,7 @@ class Display_Frame(Frame):
         tile_height = 100
 
         for i, single_flight_detail in enumerate(flight_details):
-            frm = NormalFlightFrame(self, *single_flight_detail, *main_frame_details[:3])
+            frm = NormalFlightFrame(self, *single_flight_detail, *main_frame_details)
             frm.place(relx=0.05, y=50+(i*tile_height) if i == 0 else 50+(i*tile_gap)+(i*tile_height), relwidth=0.9, height=tile_height)
 
     def update_frame(self, e=None):
