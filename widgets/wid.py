@@ -1,9 +1,13 @@
 from tkinter import *
 from datetime import datetime
+import random
+import db
+from constants import *
 
-LBL_BG = "#8D86C9"
-BORDER_COLOR = "#CDCDCD"
-BG_COLOR = "#EEEEEE"
+
+# LBL_BG = "#8D86C9"
+# BORDER_COLOR = "#CDCDCD"
+# BG_COLOR = "#EEEEEE"
 
 class PlaceholderEntry(Entry):
     def __init__(self, placeholder="", *args, **kwargs):
@@ -149,9 +153,19 @@ class BookNowPage(Toplevel):
         self.initialize_widgets()
 
     def initialize_widgets(self):
-        self.main_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
+        self.main_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BOOKING_BG_COLOR, highlightthickness=1)
         self.main_frame.place(x=5, y=5, width=380, height=282)
         
+        fare_w = 215
+        self.fare_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BOOKING_BG_COLOR, highlightthickness=1)
+        self.fare_frame.place(x=380, y=5, width=fare_w, height=282)
+        
+        self.time_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BOOKING_BG_COLOR, highlightthickness=1)
+        self.time_frame.place(x=5, y=100, width=365, height=85)
+
+        self.baggage_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BOOKING_BG_COLOR, highlightthickness=1)
+        self.baggage_frame.place(x=5, y=190, width=365, height=85)
+
         # region Details
         from_to_lbl = Label(self.main_frame, text=f"{self.details['From']}  →  {self.details['To']}", font=("Helvetica", 14, "bold"), anchor=W)
         from_to_lbl.place(x=5, y=0, relwidth=1, height=40)
@@ -163,12 +177,6 @@ class BookNowPage(Toplevel):
         flight_name_lbl = Label(self.main_frame, text=f'{self.details["Flight_name"]}  {self.details["Flight_no"]}', font=("Helvetica", 12, "bold"), anchor=W)
         flight_name_lbl.place(x=5, y=70, relwidth=1, height=20)
         # endregion
-
-        self.time_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.time_frame.place(x=5, y=100, width=365, height=85)
-
-        self.baggage_frame = Frame(self.main_frame, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.baggage_frame.place(x=5, y=190, width=365, height=85)
 
         # region Baggage Details
         self.baggage_lbl = Label(self.baggage_frame, text='Baggage         Check-in         Cabin', font=("Helvetica", 13), anchor=W)
@@ -193,21 +201,69 @@ class BookNowPage(Toplevel):
         self.stop_time_lbl.place(x=5, y=55, relwidth=0.9, height=20)
         # endregion
 
-        fare_w = 215
-        self.fare_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BG_COLOR, highlightthickness=1)
-        self.fare_frame.place(x=380, y=5, width=fare_w, height=282)
-
         # region Fare Details
         self.fare_title_lbl = Label(self.fare_frame, text="Fare Summary", font=("Helvetica", 15, "bold"), anchor=W)
-        self.fare_title_lbl.place(x=10, y=10, width=fare_w-10, height=20)
+        self.fare_title_lbl.place(x=10, y=10, width=fare_w-20, height=20)
 
         self.base_fare_lbl = Label(self.fare_frame, text="Base Fare", font=("Helvetica", 10, "bold"), anchor=W)
-        self.base_fare_lbl.place(x=10, y=45, width=fare_w-10, height=10)
+        self.base_fare_lbl.place(x=10, y=50, width=fare_w-20, height=10)
 
         base_fare_txt = f"Adult(s) ({self.details['Travellers']} x ₹{self.details['Price']})     ₹{int(self.details['Price']) * int(self.details['Travellers'])}"
         self.base_fare_price_lbl = Label(self.fare_frame, text=base_fare_txt, font=("Helvetica", 10), anchor=W)
-        self.base_fare_price_lbl.place(x=10, y=60, width=fare_w-10, height=20)
+        self.base_fare_price_lbl.place(x=10, y=65, width=fare_w-20, height=20)
+
+        self.fare_divider = Frame(self.fare_frame, highlightbackground=BORDER_COLOR, highlightthickness=1)
+        self.fare_divider.place(x=10, y=100, height=2, width=fare_w-20)
+
+        self.fees_fare_lbl = Label(self.fare_frame, text="Fee & Surcharges", font=("Helvetica", 10, "bold"), anchor=W)
+        self.fees_fare_lbl.place(x=10, y=120, width=fare_w-20, height=20)
+
+        self.surcharges = random.randint(1200, 1800)
+        fees_fare_txt = f"Total fee & surcharges:  ₹{self.surcharges}"
+        self.fees_fare_price_lbl = Label(self.fare_frame, text=fees_fare_txt, font=("Helvetica", 10), anchor=W)
+        self.fees_fare_price_lbl.place(x=10, y=140, width=fare_w-20, height=20)
+
+        self.fees_fare_divider = Frame(self.fare_frame, highlightbackground="#444444", highlightthickness=1)
+        self.fees_fare_divider.place(x=10, y=182.5, height=2, width=fare_w-20)
+
+        self.total_amount = int(self.details["Price"]) * int(self.details["Travellers"]) + self.surcharges
+        total_amt_txt = f"Total Amount:     ₹{self.total_amount}"
+        self.total_price_lbl = Label(self.fare_frame, text=total_amt_txt, font=("Helvetica", 12, "bold"), anchor=W)
+        self.total_price_lbl.place(x=10, y=195, width=fare_w-20, height=20)
         # endregion
+
+        self.book_now_btn = Button(self.fare_frame, text="Book Now", font=("Helvetica", 15), fg="#ffffff", bg=LAVENDER, bd=0, activebackground=LIGHT_LAVENDER, activeforeground="#ffffff", command=self.open_passenger_details_window)
+        self.book_now_btn.place(x=10, y=235, width=fare_w-20, height=40)
+
+    def open_passenger_details_window(self):
+        win = Toplevel()
+        win.grab_set()
+        names = []
+
+        travellers = int(self.details["Travellers"])
+        win.geometry(f"250x{(travellers-1)*5+(travellers)*30+35}")
+        win.resizable(0, 0)
+
+        for i in range(travellers):
+            Label(win, text=f"Passenger{i+1}:", ancho=W, font=("Helvetica", 12, "bold")).place(x=5, y=i*5+i*30, width=100, height=20)
+            name_entry = PlaceholderEntry(master=win, placeholder="Enter Name")
+            name_entry.place(x=120, y=i*5+i*30, width=125, height=20)
+            names.append(name_entry)
+
+        btn = Button(win, text="Get Ticket", font=("Helvetica", 15), fg="#ffffff", bg=LAVENDER, bd=0, activebackground=LIGHT_LAVENDER, activeforeground="#ffffff", command=lambda: self.book_ticket(names))
+        btn.place(x=5, y=(travellers-1)*5+(travellers)*30, width=240, height=30)
+
+    def book_ticket(self, names):
+        self.details["Name"] = names[0].get()
+        for name in names:
+            if name.get() == "" or name.get() == "Enter Name":
+                return
+
+        db.add_passengers(self.details)
+
+        names[0].master.destroy()
+        self.destroy()
+
 
 def convert_to_date_format(start, stop, start_date, stop_date=None):
     start_time, stop_time = int(start[-4::-1][::-1]), int(stop[-4::-1][::-1])

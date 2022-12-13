@@ -1,8 +1,8 @@
 from tkinter import *
 from tkinter.ttk import Combobox
-from constants import *
 from widgets.wid import SideButton, NormalFlightFrame
 from tkcalendar import DateEntry
+from constants import *
 import random as r
 
 
@@ -168,6 +168,7 @@ class Display_Frame(Frame):
 def main():
     global main_frame, flight_display_frame, win, main_frame_details
     win = Tk()
+    win.title("Airline Ticket Booking")
     win.geometry(f"{WIDTH}x{HEIGHT}")
     win.minsize(WIDTH, HEIGHT)
 
@@ -224,11 +225,11 @@ def get_selected(navbar: Nav):
 
 
 def get_oneway_flight_details():
-    for i in range(6):
+    for i in range(5):
         flight_no = "#"+str(r.randint(100000, 999999))
         flight_name = r.choice(flight_names)
         flight_start_time = r.randint(0, 23)
-        flight_end_time = flight_start_time + r.randint(1, 6)
+        flight_end_time = flight_start_time + r.randint(1, 3)
         flight_start_time = str(flight_start_time) + ":00"
         flight_end_time = str(flight_end_time) + ":00"
         flight_cost = r.randint(8000, 20000)
