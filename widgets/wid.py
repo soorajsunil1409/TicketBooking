@@ -281,23 +281,3 @@ def convert_to_date_format(start, stop, start_date, stop_date=None):
 
     out = f"{month} {total_time}h 00m"
     return out
-
-
-if __name__ == "__main__":
-
-    def book_now():
-        book = BookNowPage(win, None)
-        book.grab_set()
-
-
-    win = Tk()
-    win.geometry("1000x600")
-    win.config(bg="grey")
-
-    Button(win, text="fddffdfd", command=book_now).pack()
-
-    frm = NormalFlightFrame(win, "AirAsia", 184765, "01:00", "02:00", 23456, "Bengaluru", "Kochi", 2, datetime.now(), datetime.now())
-    frm.place(x=105, y=100, height=100, width=1000-105)
-
-
-    win.mainloop()
