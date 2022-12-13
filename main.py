@@ -120,6 +120,8 @@ class Main_Frame(Frame):
 
         main_frame_details = start_place, stop_place, travellers, start_date, stop_date
 
+        if start_place == stop_place: return
+
         switch_frame_to_display()
 
 
