@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 from datetime import datetime
 import random
 import db
@@ -152,6 +153,7 @@ class BookNowPage(Toplevel):
 
         self.initialize_widgets()
 
+
     def initialize_widgets(self):
         self.main_frame = Frame(self, highlightbackground=BORDER_COLOR, background=BOOKING_BG_COLOR, highlightthickness=1)
         self.main_frame.place(x=5, y=5, width=380, height=282)
@@ -235,6 +237,7 @@ class BookNowPage(Toplevel):
         self.book_now_btn = Button(self.fare_frame, text="Book Now", font=("Helvetica", 15), fg="#ffffff", bg=LAVENDER, bd=0, activebackground=LIGHT_LAVENDER, activeforeground="#ffffff", command=self.open_passenger_details_window)
         self.book_now_btn.place(x=10, y=235, width=fare_w-20, height=40)
 
+
     def open_passenger_details_window(self):
         win = Toplevel()
         win.grab_set()
@@ -253,16 +256,21 @@ class BookNowPage(Toplevel):
         btn = Button(win, text="Get Ticket", font=("Helvetica", 15), fg="#ffffff", bg=LAVENDER, bd=0, activebackground=LIGHT_LAVENDER, activeforeground="#ffffff", command=lambda: self.book_ticket(names))
         btn.place(x=5, y=(travellers-1)*5+(travellers)*30, width=240, height=30)
 
+
     def book_ticket(self, names):
         self.details["Name"] = names[0].get()
         for name in names:
             if name.get() == "" or name.get() == "Enter Name":
                 return
 
-        db.add_passengers(self.details)
+        ok = db.add_passengers(self.details)
+        if not ok: return
 
         names[0].master.destroy()
         self.destroy()
+
+        ok = messagebox.showinfo("Successful", "Ticket booked sucessfully")
+
 
 
 def convert_to_date_format(start, stop, start_date, stop_date=None):

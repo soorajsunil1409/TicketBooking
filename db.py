@@ -14,5 +14,10 @@ except _sql.errors.ProgrammingError:
     pass
 
 def add_passengers(details):
-    cursor.execute(f'''INSERT INTO {table_name} (Name, From_city, To_city, Date, Passengers) VALUES('{details["Name"]}', '{details["From"]}', '{details["To"]}', '{details["Start_Date"]}', '{details["Travellers"]}')''')
+    try:
+        cursor.execute(f'''INSERT INTO {table_name} (Name, From_city, To_city, Date, Passengers) VALUES('{details["Name"]}', '{details["From"]}', '{details["To"]}', '{details["Start_Date"]}', '{details["Travellers"]}')''')
+    except Exception:
+        return False
+
     con.commit()
+    return True
